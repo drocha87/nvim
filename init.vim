@@ -66,6 +66,9 @@ cnoreabbrev WQ wq
 cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
+
+
+" go_def_mapping_enabled
 let g:go_def_mapping_enabled=0
 
 let mapleader=" "
@@ -100,8 +103,6 @@ command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-hea
 command! -bang -nargs=* PRg
             \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
 
-
-
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
@@ -110,8 +111,6 @@ inoremap <C-c> <esc>
 if executable('rg')
     let g:rg_derive_root='true'
 endif
-
-
 
 " -------------------------------------------------------------------------------------------------
 " coc.nvim default settings
