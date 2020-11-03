@@ -12,6 +12,13 @@ Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'posva/vim-vue'
 Plug 'leafOfTree/vim-vue-plugin'
+
+
+" telescope
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-lua/telescope.nvim'
+
 call plug#end()
 
 filetype plugin indent on
@@ -33,15 +40,31 @@ set spell spelllang=en_us
 set smartcase
 set ignorecase
 set tabstop=2
-set shiftwidth=4
+set shiftwidth=2
 set expandtab
 set wildmenu
 set wildignore+=**/node_modules/**
 set t_Co=256
 set background=dark
 set showmatch
+set belloff=all
+set clipboard+=unnamedplus
+set mouse=r
+
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+endif
+
+set scrolloff=10 
 
 colorscheme gruvbox
+
+" netrw
+let g:netrw_browse_split = 2
+let g:netrw_banner = 0
+let g:netrw_winsize = 25
+let g:netrw_localrmdir='rm -r'
+
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
@@ -78,13 +101,8 @@ set nohlsearch
 set noerrorbells
 set termguicolors
 
-fun! s:fzf_root()
-	let path = finddir(".git", expand("%:p:h").";")
-	return fnamemodify(substitute(path, ".git", "", ""), ":p:h")
-endfun
-
-" nnnoremap <silent> <C-p> :exe 'Files ' . <SID>fzf_root()<CR>
-noremap <silent> <C-p> :Files<CR>
+"noremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <leader><leader> :Buffers<CR>
 nnoremap <silent> <leader>fc :Colors<CR>
 nnoremap <silent> <leader>fh :History<CR>
 nnoremap <silent> <leader>bb :Buffers<CR>
@@ -93,18 +111,23 @@ nnoremap <silent> <leader>h :Helptags<CR>
 nnoremap <silent> <leader>ll :Lines<CR>
 nnoremap <silent> <leader>lb :BLines<CR>
 nnoremap <silent> <leader>f :PRg<CR>
-nnoremap <silent> <leader><leader> :Buffers<CR>
 nnoremap <silent> <leader>g :GFiles<CR>
 nnoremap <silent> <leader>ag :Ag!<C-R><C-W><CR>
+
+nnoremap <Leader><CR> :e ~/.config/nvim/init.vim<CR>
+nnoremap <C-p> :lua require('telescope.builtin').find_files()<CR>
+nnoremap <C-x>p <cmd>lua require'telescope.builtin'.git_files{}<CR>
+nnoremap <Leader>fd <cmd>lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
+
+nnoremap <Leader>/ <cmd>lua require'telescope.builtin'.grep_string{}<CR>
+
+
 
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 
 command! -bang -nargs=* PRg
             \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
-
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
 
 inoremap <C-c> <esc>
 
