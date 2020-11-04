@@ -1,28 +1,39 @@
 call plug#begin('~/.vim/plugged')
-Plug 'ap/vim-css-color' "Displays a preview of colors with CSS
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'morhetz/gruvbox'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'tpope/vim-fugitive'
-Plug 'jelera/vim-javascript-syntax'
-Plug 'leafgarland/typescript-vim'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'posva/vim-vue'
-Plug 'leafOfTree/vim-vue-plugin'
+  Plug 'airblade/vim-rooter'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+  
+  Plug 'vim-airline/vim-airline'
+  Plug 'tpope/vim-fugitive'
+  Plug 'ap/vim-css-color' "Displays a preview of colors with CSS
+  
+  " LSP clients
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+  Plug 'jelera/vim-javascript-syntax'
+  Plug 'leafgarland/typescript-vim'
+  Plug 'HerringtonDarkholme/yats.vim'
+  Plug 'posva/vim-vue'
+  Plug 'leafOfTree/vim-vue-plugin'
+  
+  " GUI enhancements
+  Plug 'machakann/vim-highlightedyank'
+  Plug 'andymass/vim-matchup'
 
+  " Theme
+  Plug 'morhetz/gruvbox'
 
-" telescope
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-lua/telescope.nvim'
-
+  Plug 'alvan/vim-closetag'
+  
+  " telescope
+  " Plug 'nvim-lua/popup.nvim'
+  " Plug 'nvim-lua/plenary.nvim'
+  " Plug 'nvim-lua/telescope.nvim'
 call plug#end()
 
 filetype plugin indent on
 syntax on
+set nocompatible
 set encoding=UTF-8
 set number relativenumber
 set nu rnu
@@ -43,19 +54,42 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 set wildmenu
+
+set wildignore+=.hg,.svn,*~,*.png,*.jpg,*.gif,*.settings,Thumbs.db,*.min.js
+set wildignore+=*.swp,publish/*,intermediate/*,*.o,*.hi,Zend,vendor
 set wildignore+=**/node_modules/**
+
 set t_Co=256
 set background=dark
 set showmatch
 set belloff=all
-set clipboard+=unnamedplus
-set mouse=r
+set scrolloff=6 
 
-if has("autocmd")
+" requires Xsel installed
+set clipboard+=unnamedplus
+set mouse=a
+
+" Very magic by default
+nnoremap ? ?\v
+nnoremap / /\v
+cnoremap %s/ %sm/
+
+" Show those damn hidden characters
+" Verbose: set listchars=nbsp:¬,eol:¶,extends:»,precedes:«,trail:•
+set list
+" set lcs=tab:»,nbsp:¬,extends:»,precedes:«,trail:•
+set lcs=tab:»_,trail:•,eol:¬
+
+if has("autocmd") 
+
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 endif
 
-set scrolloff=10 
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue'
+
+" Permanent undo
+set undodir=~/.vimdid
+set undofile
 
 colorscheme gruvbox
 
@@ -64,7 +98,6 @@ let g:netrw_browse_split = 2
 let g:netrw_banner = 0
 let g:netrw_winsize = 25
 let g:netrw_localrmdir='rm -r'
-
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
@@ -90,7 +123,6 @@ cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
 
-
 " go_def_mapping_enabled
 let g:go_def_mapping_enabled=0
 
@@ -101,33 +133,43 @@ set nohlsearch
 set noerrorbells
 set termguicolors
 
-"noremap <silent> <C-p> :Files<CR>
+nnoremap <Leader><CR> :e ~/.config/nvim/init.vim<CR>
+noremap <silent> <C-p> :Files ~/devel<CR>
 nnoremap <silent> <leader><leader> :Buffers<CR>
+nnoremap <silent> <leader>g :GFiles<CR>
+nnoremap <silent> <leader>m :Marks<CR>
+
+nnoremap <Leader>/ :Ag
+nnoremap <silent> <leader>ll :Lines<CR> " Lines in loaded buffers
+nnoremap <silent> <leader>lb :BLines<CR> " Lines in current buffer
+
 nnoremap <silent> <leader>fc :Colors<CR>
 nnoremap <silent> <leader>fh :History<CR>
-nnoremap <silent> <leader>bb :Buffers<CR>
 nnoremap <silent> <leader>; :Commands<CR>
 nnoremap <silent> <leader>h :Helptags<CR>
-nnoremap <silent> <leader>ll :Lines<CR>
-nnoremap <silent> <leader>lb :BLines<CR>
 nnoremap <silent> <leader>f :PRg<CR>
-nnoremap <silent> <leader>g :GFiles<CR>
 nnoremap <silent> <leader>ag :Ag!<C-R><C-W><CR>
 
-nnoremap <Leader><CR> :e ~/.config/nvim/init.vim<CR>
-nnoremap <C-p> :lua require('telescope.builtin').find_files()<CR>
-nnoremap <C-x>p <cmd>lua require'telescope.builtin'.git_files{}<CR>
-nnoremap <Leader>fd <cmd>lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
 
-nnoremap <Leader>/ <cmd>lua require'telescope.builtin'.grep_string{}<CR>
+nnoremap <PageUp> :bn<CR>
+nnoremap <PageDown> :bp<CR>
 
-
-
-command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
-
+" FZF.vim now supports this command out of the box
+" so this code is no longer needed.
+command! -bang -nargs=* RG
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
+  \   <bang>0)
+nnoremap <C-g> :PRg<Cr>
 
 command! -bang -nargs=* PRg
-            \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
+
+" nnoremap <C-p> :lua require('telescope.builtin').find_files()<CR>
+" nnoremap <C-x>p <cmd>lua require'telescope.builtin'.git_files{}<CR>
+" nnoremap <Leader>fd <cmd>lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
 
 inoremap <C-c> <esc>
 
@@ -148,7 +190,7 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
-let g:coc_global_extensions = [ 'coc-tsserver', 'coc-json', 'coc-html' ]
+let g:coc_global_extensions = [ 'coc-tsserver', 'coc-json', 'coc-html', 'coc-vetur', 'coc-prettier' ]
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.

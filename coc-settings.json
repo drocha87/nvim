@@ -6,5 +6,6 @@
       "trace.server": "verbose",
       "filetypes": ["go"]
     }
-  }
+  },
+  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "vue"]
 }
