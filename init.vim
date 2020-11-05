@@ -1,34 +1,35 @@
 call plug#begin('~/.vim/plugged')
-  Plug 'airblade/vim-rooter'
-  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-  Plug 'junegunn/fzf.vim'
-  
-  Plug 'vim-airline/vim-airline'
-  Plug 'tpope/vim-fugitive'
-  Plug 'ap/vim-css-color' "Displays a preview of colors with CSS
-  
-  " LSP clients
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-  Plug 'jelera/vim-javascript-syntax'
-  Plug 'leafgarland/typescript-vim'
-  Plug 'HerringtonDarkholme/yats.vim'
-  Plug 'posva/vim-vue'
-  Plug 'leafOfTree/vim-vue-plugin'
-  
-  " GUI enhancements
-  Plug 'machakann/vim-highlightedyank'
-  Plug 'andymass/vim-matchup'
+Plug 'airblade/vim-rooter'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
-  " Theme
-  Plug 'morhetz/gruvbox'
+Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-fugitive'
+Plug 'ap/vim-css-color' "Displays a preview of colors with CSS
 
-  Plug 'alvan/vim-closetag'
-  
-  " telescope
-  " Plug 'nvim-lua/popup.nvim'
-  " Plug 'nvim-lua/plenary.nvim'
-  " Plug 'nvim-lua/telescope.nvim'
+" LSP clients
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'jelera/vim-javascript-syntax'
+Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'posva/vim-vue'
+Plug 'leafOfTree/vim-vue-plugin'
+
+" GUI enhancements
+Plug 'machakann/vim-highlightedyank'
+Plug 'andymass/vim-matchup'
+
+" Theme
+Plug 'morhetz/gruvbox'
+Plug 'dracula/vim', { 'as': 'dracula' }
+
+Plug 'alvan/vim-closetag'
+
+" telescope
+" Plug 'nvim-lua/popup.nvim'
+" Plug 'nvim-lua/plenary.nvim'
+" Plug 'nvim-lua/telescope.nvim'
 call plug#end()
 
 filetype plugin indent on
@@ -76,9 +77,9 @@ cnoremap %s/ %sm/
 
 " Show those damn hidden characters
 " Verbose: set listchars=nbsp:¬,eol:¶,extends:»,precedes:«,trail:•
-set list
+" set list
 " set lcs=tab:»,nbsp:¬,extends:»,precedes:«,trail:•
-set lcs=tab:»_,trail:•,eol:¬
+" set lcs=tab:»_,trail:•,eol:¬
 
 if has("autocmd") 
 
@@ -87,11 +88,13 @@ endif
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue'
 
+
 " Permanent undo
 set undodir=~/.vimdid
 set undofile
 
 colorscheme gruvbox
+let &t_SI.="\<Esc>[5 q"
 
 " netrw
 let g:netrw_browse_split = 2
@@ -134,7 +137,8 @@ set noerrorbells
 set termguicolors
 
 nnoremap <Leader><CR> :e ~/.config/nvim/init.vim<CR>
-noremap <silent> <C-p> :Files ~/devel<CR>
+noremap <silent> <C-p> :Files <CR>
+noremap <silent> <leader>p :Files ~/devel<CR>
 nnoremap <silent> <leader><leader> :Buffers<CR>
 nnoremap <silent> <leader>g :GFiles<CR>
 nnoremap <silent> <leader>m :Marks<CR>
@@ -157,15 +161,15 @@ nnoremap <PageDown> :bp<CR>
 " FZF.vim now supports this command out of the box
 " so this code is no longer needed.
 command! -bang -nargs=* RG
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
-  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
-  \   <bang>0)
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+      \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
+      \   <bang>0)
 nnoremap <C-g> :PRg<Cr>
 
 command! -bang -nargs=* PRg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
+      \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
 
 " nnoremap <C-p> :lua require('telescope.builtin').find_files()<CR>
 " nnoremap <C-x>p <cmd>lua require'telescope.builtin'.git_files{}<CR>
@@ -174,7 +178,7 @@ command! -bang -nargs=* PRg
 inoremap <C-c> <esc>
 
 if executable('rg')
-    let g:rg_derive_root='true'
+  let g:rg_derive_root='true'
 endif
 
 " -------------------------------------------------------------------------------------------------
@@ -207,6 +211,8 @@ endfunction
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
+" Use to CocFix.
+nmap <silent> gf <Plug>(coc-fix)
 
 " Use `[c` and `]c` to navigate diagnostics
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
