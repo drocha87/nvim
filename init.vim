@@ -3,9 +3,10 @@ Plug 'airblade/vim-rooter'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
 Plug 'ap/vim-css-color' "Displays a preview of colors with CSS
+Plug 'itchyny/lightline.vim'
 
 " LSP clients
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -27,8 +28,8 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'alvan/vim-closetag'
 
 " telescope
-" Plug 'nvim-lua/popup.nvim'
-" Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
 " Plug 'nvim-lua/telescope.nvim'
 call plug#end()
 
@@ -82,7 +83,6 @@ cnoremap %s/ %sm/
 " set lcs=tab:»_,trail:•,eol:¬
 
 if has("autocmd") 
-
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 endif
 
@@ -136,24 +136,27 @@ set nohlsearch
 set noerrorbells
 set termguicolors
 
-nnoremap <Leader><CR> :e ~/.config/nvim/init.vim<CR>
-noremap <silent> <C-p> :Files <CR>
+" I really don't need preview
+let g:fzf_preview_window = []
+
+" Open my config in a vertical split window
+nnoremap <Leader><CR> :vs ~/.config/nvim/init.vim<CR>
+noremap <silent> <C-p> :Files<CR>
+noremap <silent> <C-g> :GFiles<CR>
 noremap <silent> <leader>p :Files ~/devel<CR>
 nnoremap <silent> <leader><leader> :Buffers<CR>
-nnoremap <silent> <leader>g :GFiles<CR>
 nnoremap <silent> <leader>m :Marks<CR>
 
-nnoremap <Leader>/ :Ag
-nnoremap <silent> <leader>ll :Lines<CR> " Lines in loaded buffers
-nnoremap <silent> <leader>lb :BLines<CR> " Lines in current buffer
+nnoremap <silent> <leader>/ :Ag<CR>
+nnoremap <silent> <leader>A :Ag!<C-R><C-W><CR>
+nnoremap <silent> <leader>ll :Lines<CR> 
+nnoremap <silent> <leader>lb :BLines<CR> 
 
 nnoremap <silent> <leader>fc :Colors<CR>
 nnoremap <silent> <leader>fh :History<CR>
 nnoremap <silent> <leader>; :Commands<CR>
 nnoremap <silent> <leader>h :Helptags<CR>
 nnoremap <silent> <leader>f :PRg<CR>
-nnoremap <silent> <leader>ag :Ag!<C-R><C-W><CR>
-
 
 nnoremap <PageUp> :bn<CR>
 nnoremap <PageDown> :bp<CR>
@@ -171,9 +174,16 @@ nnoremap <C-g> :PRg<Cr>
 command! -bang -nargs=* PRg
       \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
 
-" nnoremap <C-p> :lua require('telescope.builtin').find_files()<CR>
-" nnoremap <C-x>p <cmd>lua require'telescope.builtin'.git_files{}<CR>
-" nnoremap <Leader>fd <cmd>lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
+" nnoremap <C-p> :lua require'telescope.builtin'.find_files()<CR>
+" nnoremap <C-P> :lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
+" nnoremap <C-g> :lua require'telescope.builtin'.git_files()<CR>
+" nnoremap <leader>/ :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({ winblend = 10 }))<CR>
+
+" Use tab to focus to window
+" My own implementation of open tab and set cursor position to actual buffer
+" position
+nnoremap <silent> <F1> :lua require'drocha'.open_tab()<CR>
+nnoremap <F2> :tabclose<CR>
 
 inoremap <C-c> <esc>
 
@@ -208,6 +218,7 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -250,27 +261,39 @@ nmap <leader>rn <Plug>(coc-rename)
 " Resume latest coc list
 " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 "
-if !exists('g:airline_powerline_fonts')
-  let g:airline#extensions#tabline#left_sep = ' '
-  let g:airline#extensions#tabline#left_alt_sep = '|'
-  let g:airline_left_sep          = '▶'
-  let g:airline_left_alt_sep      = '»'
-  let g:airline_right_sep         = '◀'
-  let g:airline_right_alt_sep     = '«'
-  let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
-  let g:airline#extensions#readonly#symbol   = '⊘'
-  let g:airline#extensions#linecolumn#prefix = '¶'
-  let g:airline#extensions#paste#symbol      = 'ρ'
-else
-  let g:airline#extensions#tabline#left_sep = ''
-  let g:airline#extensions#tabline#left_alt_sep = ''
+" if !exists('g:airline_powerline_fonts')
+"   let g:airline#extensions#tabline#left_sep = ' '
+"   let g:airline#extensions#tabline#left_alt_sep = '|'
+"   let g:airline_left_sep          = '▶'
+"   let g:airline_left_alt_sep      = '»'
+"   let g:airline_right_sep         = '◀'
+"   let g:airline_right_alt_sep     = '«'
+"   let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
+"   let g:airline#extensions#readonly#symbol   = '⊘'
+"   let g:airline#extensions#linecolumn#prefix = '¶'
+"   let g:airline#extensions#paste#symbol      = 'ρ'
+" else
+"   let g:airline#extensions#tabline#left_sep = ''
+"   let g:airline#extensions#tabline#left_alt_sep = ''
+" 
+"   " powerline symbols
+"   let g:airline_left_sep = ''
+"   let g:airline_left_alt_sep = ''
+"   let g:airline_right_sep = ''
+"   let g:airline_right_alt_sep = ''
+"   let g:airline_symbols.branch = ''
+"   let g:airline_symbols.readonly = ''
+"   let g:airline_symbols.linenr = ''
+" endif
 
-  " powerline symbols
-  let g:airline_left_sep = ''
-  let g:airline_left_alt_sep = ''
-  let g:airline_right_sep = ''
-  let g:airline_right_alt_sep = ''
-  let g:airline_symbols.branch = ''
-  let g:airline_symbols.readonly = ''
-  let g:airline_symbols.linenr = ''
-endif
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead',
+      \ },
+      \ }
+
