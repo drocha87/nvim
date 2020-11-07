@@ -2,10 +2,16 @@ call plug#begin('~/.vim/plugged')
 Plug 'airblade/vim-rooter'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-
-" Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-fugitive'
-Plug 'ap/vim-css-color' "Displays a preview of colors with CSS
+Plug 'editorconfig/editorconfig-vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'machakann/vim-sandwich'
+Plug 'mattn/emmet-vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'ap/vim-css-color' 
 Plug 'itchyny/lightline.vim'
 
 " LSP clients
@@ -16,6 +22,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'posva/vim-vue'
 Plug 'leafOfTree/vim-vue-plugin'
+Plug 'rust-lang/rust.vim'
 
 " GUI enhancements
 Plug 'machakann/vim-highlightedyank'
@@ -25,11 +32,15 @@ Plug 'andymass/vim-matchup'
 Plug 'morhetz/gruvbox'
 Plug 'dracula/vim', { 'as': 'dracula' }
 
+" Html close tag
 Plug 'alvan/vim-closetag'
 
+" Rust and Toml
+Plug 'cespare/vim-toml' 
+
 " telescope
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
+" Plug 'nvim-lua/popup.nvim'
+" Plug 'nvim-lua/plenary.nvim'
 " Plug 'nvim-lua/telescope.nvim'
 call plug#end()
 
@@ -173,6 +184,11 @@ nnoremap <C-g> :PRg<Cr>
 
 command! -bang -nargs=* PRg
       \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
+
+
+" Terminal maps
+:tnoremap <Esc> <C-\><C-n>
+
 
 " nnoremap <C-p> :lua require'telescope.builtin'.find_files()<CR>
 " nnoremap <C-P> :lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
