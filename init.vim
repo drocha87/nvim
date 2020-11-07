@@ -99,7 +99,6 @@ endif
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue'
 
-
 " Permanent undo
 set undodir=~/.vimdid
 set undofile
@@ -117,10 +116,6 @@ let g:netrw_localrmdir='rm -r'
 " search will center on the line it's found in.
 nnoremap n nzzzv
 nnoremap N Nzzzv
-
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
-let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#ale#enabled = 1
 
 "*****************************************************************************
 "" Abbreviations
@@ -150,6 +145,10 @@ set termguicolors
 " I really don't need preview
 let g:fzf_preview_window = []
 
+" As we remap terminal escape we need to fix this remap in fzf
+" ass suggested in this issue https://github.com/junegunn/fzf/issues/1393
+autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
+
 " Open my config in a vertical split window
 nnoremap <Leader><CR> :vs ~/.config/nvim/init.vim<CR>
 noremap <silent> <C-p> :Files<CR>
@@ -172,23 +171,8 @@ nnoremap <silent> <leader>f :PRg<CR>
 nnoremap <PageUp> :bn<CR>
 nnoremap <PageDown> :bp<CR>
 
-" FZF.vim now supports this command out of the box
-" so this code is no longer needed.
-command! -bang -nargs=* RG
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
-      \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
-      \   <bang>0)
-nnoremap <C-g> :PRg<Cr>
-
-command! -bang -nargs=* PRg
-      \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': system('git -C '.expand('%:p:h').' rev-parse --show-toplevel 2> /dev/null')[:-2]}, <bang>0)
-
-
 " Terminal maps
 :tnoremap <Esc> <C-\><C-n>
-
 
 " nnoremap <C-p> :lua require'telescope.builtin'.find_files()<CR>
 " nnoremap <C-P> :lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
