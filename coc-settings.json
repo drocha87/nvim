@@ -7,5 +7,7 @@
       "filetypes": ["go"]
     }
   },
-  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "vue"]
+  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "vue", "typescript"],
+  "suggest.noselect": false,
+  "suggest.enablePreselect": false
 }
