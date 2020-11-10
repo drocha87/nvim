@@ -186,7 +186,7 @@ tnoremap <Esc> <C-\><C-n>
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Vim fugitive
-nnoremap <F4> :tab G<CR> 
+nnoremap <F12> :tab G<CR> 
 
 " nnoremap <C-p> :lua require'telescope.builtin'.find_files()<CR>
 " nnoremap <C-P> :lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
