@@ -142,6 +142,13 @@ set nohlsearch
 set noerrorbells
 set termguicolors
 
+" Resize window factor improved
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+nnoremap <silent> <Leader>> :vertical resize +10<CR>
+nnoremap <silent> <Leader>< :vertical resize -10<CR>
+
+
 " I really don't need preview
 let g:fzf_preview_window = []
 
@@ -157,7 +164,7 @@ noremap <silent> <leader>p :Files ~/devel<CR>
 nnoremap <silent> <leader><leader> :Buffers<CR>
 nnoremap <silent> <leader>m :Marks<CR>
 
-nnoremap <silent> <leader>/ :Ag<CR>
+nmap <silent> <C-_> :Ag<CR>
 nnoremap <silent> <leader>A :Ag!<C-R><C-W><CR>
 nnoremap <silent> <leader>ll :Lines<CR> 
 nnoremap <silent> <leader>lb :BLines<CR> 
@@ -172,7 +179,14 @@ nnoremap <PageUp> :bn<CR>
 nnoremap <PageDown> :bp<CR>
 
 " Terminal maps
-:tnoremap <Esc> <C-\><C-n>
+tnoremap <Esc> <C-\><C-n>
+
+" completion improvements
+" set completeopt=longest,menuone
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Vim fugitive
+nnoremap <F4> :tab G<CR> 
 
 " nnoremap <C-p> :lua require'telescope.builtin'.find_files()<CR>
 " nnoremap <C-P> :lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
