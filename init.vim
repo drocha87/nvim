@@ -1,5 +1,6 @@
 call plug#begin('~/.vim/plugged')
 Plug 'airblade/vim-rooter'
+Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
@@ -10,7 +11,6 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
-Plug 'airblade/vim-gitgutter'
 Plug 'ap/vim-css-color' 
 Plug 'itchyny/lightline.vim'
 
@@ -37,6 +37,9 @@ Plug 'alvan/vim-closetag'
 
 " Rust and Toml
 Plug 'cespare/vim-toml' 
+
+" Vim treesitter
+" Plug 'nvim-treesitter/nvim-treesitter'
 
 " telescope
 " Plug 'nvim-lua/popup.nvim'
@@ -86,6 +89,16 @@ set mouse=a
 nnoremap ? ?\v
 nnoremap / /\v
 cnoremap %s/ %sm/
+
+" TreeSitter
+" lua <<EOF
+" require'nvim-treesitter.configs'.setup {
+"   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+"   highlight = {
+"     enable = true,              -- false will disable the whole extension
+"   },
+" } 
+" EOF
 
 " Show those damn hidden characters
 " Verbose: set listchars=nbsp:¬,eol:¶,extends:»,precedes:«,trail:•
@@ -197,7 +210,7 @@ nnoremap <F12> :tab G<CR>
 " My own implementation of open tab and set cursor position to actual buffer
 " position
 nnoremap <silent> <F1> :lua require'drocha'.open_tab()<CR>
-nnoremap <F2> :tabclose<CR>
+nnoremap <F4> :tabclose<CR>
 
 inoremap <C-c> <esc>
 
