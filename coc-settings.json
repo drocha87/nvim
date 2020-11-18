@@ -7,8 +7,11 @@
       "filetypes": ["go"]
     }
   },
-  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "vue", "typescript"],
+  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", ".vue", "typescript"],
   "suggest.noselect": false,
   "suggest.enablePreselect": false,
-  "vetur.trace.server": "verbose"
+  "vetur.trace.server": "verbose",
+  "prettier.disableLanguages": [
+    "vue"
+  ]
 }

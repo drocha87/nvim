@@ -13,6 +13,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color' 
 Plug 'itchyny/lightline.vim'
+Plug 'mhinz/vim-startify'
 
 " LSP clients
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -21,7 +22,8 @@ Plug 'jelera/vim-javascript-syntax'
 Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'posva/vim-vue'
-Plug 'leafOfTree/vim-vue-plugin'
+Plug 'prettier/vim-prettier'
+" Plug 'leafOfTree/vim-vue-plugin'
 Plug 'rust-lang/rust.vim'
 
 " GUI enhancements
@@ -38,6 +40,7 @@ Plug 'alvan/vim-closetag'
 " Rust and Toml
 Plug 'cespare/vim-toml' 
 
+Plug 'chriskempson/base16-vim'
 " Vim treesitter
 " Plug 'nvim-treesitter/nvim-treesitter'
 
@@ -48,7 +51,6 @@ Plug 'cespare/vim-toml'
 call plug#end()
 
 filetype plugin indent on
-syntax on
 set nocompatible
 set encoding=UTF-8
 set number relativenumber
@@ -63,23 +65,34 @@ set laststatus=2
 set cmdheight=1
 set backspace=indent,eol,start confirm
 set autoread wildmode=longest,list,full
-set spell spelllang=en_us
+" set spell spelllang=en_us
 set smartcase
 set ignorecase
+set gdefault
 set tabstop=2
+set softtabstop=2
 set shiftwidth=2
 set expandtab
 set wildmenu
+
+" highlight ActiveWindow ctermbg=00 
+" highlight InactiveWindow ctermbg=226
+" set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
 
 set wildignore+=.hg,.svn,*~,*.png,*.jpg,*.gif,*.settings,Thumbs.db,*.min.js
 set wildignore+=*.swp,publish/*,intermediate/*,*.o,*.hi,Zend,vendor
 set wildignore+=**/node_modules/**
 
-set t_Co=256
+" set t_Co=256
 set background=dark
 set showmatch
 set belloff=all
 set scrolloff=6 
+
+let base16colorspace=256  " Access colors present in 256 colorspace
+colorscheme base16-gruvbox-dark-hard
+syntax on
+hi Normal ctermbg=NONE
 
 " requires Xsel installed
 set clipboard+=unnamedplus
@@ -89,6 +102,7 @@ set mouse=a
 nnoremap ? ?\v
 nnoremap / /\v
 cnoremap %s/ %sm/
+nnoremap ; :
 
 " TreeSitter
 " lua <<EOF
@@ -116,7 +130,7 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue'
 set undodir=~/.vimdid
 set undofile
 
-colorscheme gruvbox
+" colorscheme gruvbox
 let &t_SI.="\<Esc>[5 q"
 
 " netrw
@@ -151,7 +165,12 @@ let g:go_def_mapping_enabled=0
 let mapleader=" "
 set incsearch
 set hlsearch
-set nohlsearch
+
+" set nohlsearch
+" Ctrl+h to stop searching
+vnoremap <C-h> :nohlsearch<cr>
+nnoremap <C-h> :nohlsearch<cr>
+
 set noerrorbells
 set termguicolors
 
@@ -160,7 +179,6 @@ nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 nnoremap <silent> <Leader>> :vertical resize +10<CR>
 nnoremap <silent> <Leader>< :vertical resize -10<CR>
-
 
 " I really don't need preview
 let g:fzf_preview_window = []
