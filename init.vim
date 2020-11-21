@@ -8,8 +8,8 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-fugitive'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'jiangmiao/auto-pairs'
-Plug 'machakann/vim-sandwich'
+" Plug 'jiangmiao/auto-pairs'
+" Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color' 
 Plug 'itchyny/lightline.vim'
@@ -33,6 +33,7 @@ Plug 'andymass/vim-matchup'
 " Theme
 Plug 'morhetz/gruvbox'
 Plug 'dracula/vim', { 'as': 'dracula' }
+" Plug 'cormacrelf/vim-colors-github'
 
 " Html close tag
 Plug 'alvan/vim-closetag'
@@ -74,7 +75,7 @@ set softtabstop=2
 set shiftwidth=2
 set expandtab
 set wildmenu
-
+set path+=.,**
 " highlight ActiveWindow ctermbg=00 
 " highlight InactiveWindow ctermbg=226
 " set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
@@ -84,13 +85,14 @@ set wildignore+=*.swp,publish/*,intermediate/*,*.o,*.hi,Zend,vendor
 set wildignore+=**/node_modules/**
 
 " set t_Co=256
-set background=dark
 set showmatch
 set belloff=all
 set scrolloff=6 
 
+set background=dark
 let base16colorspace=256  " Access colors present in 256 colorspace
 colorscheme base16-gruvbox-dark-hard
+
 syntax on
 hi Normal ctermbg=NONE
 
@@ -134,10 +136,10 @@ set undofile
 let &t_SI.="\<Esc>[5 q"
 
 " netrw
-let g:netrw_browse_split = 2
-let g:netrw_banner = 0
-let g:netrw_winsize = 25
-let g:netrw_localrmdir='rm -r'
+" let g:netrw_browse_split = 2
+" let g:netrw_banner = 0
+" let g:netrw_winsize = 25
+" let g:netrw_localrmdir='rm -r'
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
@@ -206,23 +208,14 @@ nnoremap <silent> <leader>; :Commands<CR>
 nnoremap <silent> <leader>h :Helptags<CR>
 nnoremap <silent> <leader>f :PRg<CR>
 
-nnoremap <PageUp> :bn<CR>
-nnoremap <PageDown> :bp<CR>
+nnoremap <PageUp> :tabn<CR>
+nnoremap <PageDown> :tabp<CR>
 
 " Terminal maps
 tnoremap <Esc> <C-\><C-n>
 
-" completion improvements
-" set completeopt=longest,menuone
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
 " Vim fugitive
 nnoremap <F12> :tab G<CR> 
-
-" nnoremap <C-p> :lua require'telescope.builtin'.find_files()<CR>
-" nnoremap <C-P> :lua require'telescope.builtin'.find_files{ cwd = "~/devel" }<CR>
-" nnoremap <C-g> :lua require'telescope.builtin'.git_files()<CR>
-" nnoremap <leader>/ :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({ winblend = 10 }))<CR>
 
 " Use tab to focus to window
 " My own implementation of open tab and set cursor position to actual buffer
@@ -236,9 +229,8 @@ if executable('rg')
   let g:rg_derive_root='true'
 endif
 
-" -------------------------------------------------------------------------------------------------
-" coc.nvim default settings
-" -------------------------------------------------------------------------------------------------
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
 
 " if hidden is not set, TextEdit might fail.
 set hidden
@@ -250,6 +242,7 @@ set shortmess+=c
 set signcolumn=yes
 
 let g:coc_global_extensions = [ 'coc-tsserver', 'coc-json', 'coc-html', 'coc-vetur', 'coc-prettier' ]
+
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -263,12 +256,15 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+" completion improvements
+" set completeopt=longest,menuone
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 " Use to CocFix.
-nmap <silent> gf <Plug>(coc-fix)
+" nmap <silent> gf <Plug>(coc-fix)
 
 " Use `[c` and `]c` to navigate diagnostics
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
@@ -285,51 +281,6 @@ nnoremap <silent> U :call <SID>show_documentation()<CR>
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
-
-" Remap for format selected region
-" vmap <leader>f  <Plug>(coc-format-selected)
-" nmap <leader>f  <Plug>(coc-format-selected)
-" Show all diagnostics
-" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
-" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document
-" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols
-" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list
-" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-"
-" if !exists('g:airline_powerline_fonts')
-"   let g:airline#extensions#tabline#left_sep = ' '
-"   let g:airline#extensions#tabline#left_alt_sep = '|'
-"   let g:airline_left_sep          = '▶'
-"   let g:airline_left_alt_sep      = '»'
-"   let g:airline_right_sep         = '◀'
-"   let g:airline_right_alt_sep     = '«'
-"   let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
-"   let g:airline#extensions#readonly#symbol   = '⊘'
-"   let g:airline#extensions#linecolumn#prefix = '¶'
-"   let g:airline#extensions#paste#symbol      = 'ρ'
-" else
-"   let g:airline#extensions#tabline#left_sep = ''
-"   let g:airline#extensions#tabline#left_alt_sep = ''
-" 
-"   " powerline symbols
-"   let g:airline_left_sep = ''
-"   let g:airline_left_alt_sep = ''
-"   let g:airline_right_sep = ''
-"   let g:airline_right_alt_sep = ''
-"   let g:airline_symbols.branch = ''
-"   let g:airline_symbols.readonly = ''
-"   let g:airline_symbols.linenr = ''
-" endif
 
 let g:lightline = {
       \ 'colorscheme': 'wombat',
