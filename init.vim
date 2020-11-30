@@ -168,7 +168,7 @@ let mapleader=" "
 set incsearch
 set hlsearch
 
-" set nohlsearch
+set nohlsearch
 " Ctrl+h to stop searching
 vnoremap <C-h> :nohlsearch<cr>
 nnoremap <C-h> :nohlsearch<cr>
@@ -191,8 +191,8 @@ autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
 
 " Open my config in a vertical split window
 nnoremap <Leader><CR> :vs ~/.config/nvim/init.vim<CR>
-noremap <silent> <C-p> :Files<CR>
-noremap <silent> <C-g> :GFiles<CR>
+noremap <silent> <C-g> :Files<CR>
+noremap <silent> <C-p> :GFiles<CR>
 noremap <silent> <leader>p :Files ~/devel<CR>
 nnoremap <silent> <leader><leader> :Buffers<CR>
 nnoremap <silent> <leader>m :Marks<CR>
