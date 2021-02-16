@@ -43,12 +43,12 @@ Plug 'cespare/vim-toml'
 
 Plug 'chriskempson/base16-vim'
 " Vim treesitter
-" Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } 
 
 " telescope
-" Plug 'nvim-lua/popup.nvim'
-" Plug 'nvim-lua/plenary.nvim'
-" Plug 'nvim-lua/telescope.nvim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 filetype plugin indent on
@@ -190,11 +190,14 @@ let g:fzf_preview_window = []
 autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
 
 " Open my config in a vertical split window
+nnoremap <silent> <leader><leader> :Telescope find_files<CR>
+nnoremap <silent> <leader>bb :Telescope buffers<CR>
+nnoremap <silent> <leader>sp :Telescope live_grep<CR>
+
 nnoremap <Leader><CR> :vs ~/.config/nvim/init.vim<CR>
 noremap <silent> <C-g> :Files<CR>
 noremap <silent> <C-p> :GFiles<CR>
 noremap <silent> <leader>p :Files ~/devel<CR>
-nnoremap <silent> <leader><leader> :Buffers<CR>
 nnoremap <silent> <leader>m :Marks<CR>
 
 nmap <silent> <C-_> :Ag<CR>
