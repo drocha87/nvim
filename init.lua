@@ -43,7 +43,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	{ "VonHeikemen/lsp-zero.nvim", branch = "dev-v3" },
+	{ "VonHeikemen/lsp-zero.nvim",        branch = "dev-v3" },
 	{ "williamboman/mason.nvim" },
 	{ "williamboman/mason-lspconfig.nvim" },
 
@@ -135,7 +135,7 @@ require("lazy").setup({
 	{
 		"rebelot/kanagawa.nvim",
 		-- "folke/tokyonight.nvim",
-		lazy = false, -- make sure we load this during startup if it is your main colorscheme
+		lazy = false,  -- make sure we load this during startup if it is your main colorscheme
 		priority = 1000, -- make sure to load this before all the other start plugins
 		config = function()
 			require("kanagawa").setup({
@@ -150,7 +150,7 @@ require("lazy").setup({
 			})
 			-- load the colorscheme here
 			-- vim.cmd([[colorscheme tokyonight]])
-			vim.opt.background = "light"
+			vim.opt.background = "dark"
 			vim.cmd([[colorscheme kanagawa]])
 		end,
 	},
@@ -166,8 +166,13 @@ require("mason").setup({})
 require("mason-lspconfig").setup({
 	-- Replace the language servers listed here
 	-- with the ones you want to install
-	ensure_installed = { "tsserver" },
+	ensure_installed = { "tsserver", "clangd" },
 	handlers = { lsp.default_setup },
+	-- config = {
+	-- 	clangd = {
+	-- 		language_version = "c++20",
+	-- 	},
+	-- },
 })
 
 require("lsp-zero").extend_cmp()
@@ -198,10 +203,15 @@ local null_ls = require("null-ls")
 
 null_ls.setup({
 	sources = {
+		null_ls.builtins.code_actions.gomodifytags,
+		null_ls.builtins.formatting.gofmt,
+		null_ls.builtins.formatting.goimports,
+
+		null_ls.builtins.formatting.clang_format,
 		null_ls.builtins.formatting.stylua,
 		-- null_ls.builtins.diagnostics.eslint,
 		null_ls.builtins.formatting.prettier.with({
-			extra_filetypes = { "svelte", "toml", "html" },
+			extra_filetypes = { "svelte", "toml", "html", "mjml" },
 		}),
 		null_ls.builtins.completion.spell,
 	},
@@ -263,3 +273,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 vim.keymap.set("n", "<leader>l", "<cmd>:Lazy<cr>", {})
 vim.keymap.set("n", "<F12>", "<cmd>:silent! set spell!<cr>", {})
+
+-- Treat .mjml files as HTML
+vim.cmd([[
+  au BufRead,BufNewFile *.mjml set filetype=html
+]])
