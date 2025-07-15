@@ -100,6 +100,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local bufnr = args.buf
     local opts = { buffer = bufnr, noremap = true, silent = true }
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
@@ -158,3 +159,28 @@ vim.api.nvim_create_autocmd("LspAttach", {
 --     end
 --   end,
 -- })
+
+
+vim.keymap.set("n", "<C-_>", function()
+  -- Prompt user for input (uses vim.ui.input, works with fzf/lua-pickers too)
+  vim.ui.input({ prompt = "git grep > " }, function(term)
+    if not term or term == "" then return end
+
+    -- You can change 'src/' to '.' or any path
+    local cmd = string.format("git grep -n %q src/", term)
+    local result = vim.fn.systemlist(cmd)
+
+    if vim.v.shell_error ~= 0 or #result == 0 then
+      vim.notify("No results found", vim.log.levels.INFO)
+      return
+    end
+
+    -- Load into quickfix list
+    vim.fn.setqflist({}, ' ', {
+      title = "git grep: " .. term,
+      lines = result
+    })
+
+    vim.cmd("copen")
+  end)
+end, { desc = "Git grep and open quickfix" })
