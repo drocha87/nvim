@@ -73,43 +73,71 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-vim.lsp.config['lua_ls'] = {
-  cmd = { 'lua-language-server' },
-  filetypes = { 'lua' },
-  root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT',
-      }
-    }
-  }
+vim.pack.add {
+  { src = 'https://github.com/neovim/nvim-lspconfig' },
 }
+
 vim.lsp.enable('lua_ls')
 
-vim.lsp.config['gopls'] = {
-  cmd = { 'gopls' },
-  filetypes = { 'go' },
-  root_markers = { { 'go.mod' }, '.git' },
-  settings = {
-    gopls = {
-      gofumpt = true,
-      staticcheck = true,
-    },
-  }
-}
 vim.lsp.enable('gopls')
 
-vim.lsp.config['ts_ls'] = {
-  cmd = { 'typescript-language-server', '--stdio' },
-  filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
-  root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
-}
-vim.lsp.enable('ts_ls')
+vim.lsp.enable('tsc')
 
-vim.lsp.config['svelte'] = {
-  cmd = { 'svelteserver', '--stdio' },
-  filetypes = { 'svelte' },
-  root_markers = { 'svelte.config.js', 'svelte.config.ts', 'package.json', '.git' },
-}
+-- npm install [-g] @biomejs/biome
+vim.lsp.enable('biome')
+
+-- npm install -g @olrtg/emmet-language-server
+vim.lsp.enable('emmet_language_server')
+
+-- npm install [-g] svelte-language-server
 vim.lsp.enable('svelte')
+
+-- npm install -g @astrojs/language-server
+vim.lsp.enable('astro')
+
+-- npm install -g typescript@<version> typescript-language-server
+-- npm install [-g] @biomejs/biome
+
+-- npm install -g @olrtg/emmet-language-server
+-- npm install -g svelte-language-server
+-- npm install -g @astrojs/language-server
+
+-- vim.lsp.config['lua_ls'] = {
+--   cmd = { 'lua-language-server' },
+--   filetypes = { 'lua' },
+--   root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
+--   settings = {
+--     Lua = {
+--       runtime = {
+--         version = 'LuaJIT',
+--       }
+--     }
+--   }
+-- }
+--
+-- vim.lsp.config['gopls'] = {
+--   cmd = { 'gopls' },
+--   filetypes = { 'go' },
+--   root_markers = { { 'go.mod' }, '.git' },
+--   settings = {
+--     gopls = {
+--       gofumpt = true,
+--       staticcheck = true,
+--     },
+--   }
+-- }
+-- vim.lsp.enable('gopls')
+--
+-- vim.lsp.config['ts_ls'] = {
+--   cmd = { 'typescript-language-server', '--stdio' },
+--   filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+--   root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+-- }
+-- vim.lsp.enable('ts_ls')
+--
+-- vim.lsp.config['svelte'] = {
+--   cmd = { 'svelteserver', '--stdio' },
+--   filetypes = { 'svelte' },
+--   root_markers = { 'svelte.config.js', 'svelte.config.ts', 'package.json', '.git' },
+-- }
+-- vim.lsp.enable('svelte')

@@ -30,8 +30,6 @@ function rg_picker()
   end
 end
 
-vim.keymap.set('n', '<leader>f', ":find ")
 -- vim.keymap.set('n', '<leader>f', file_picker('git ls-files'))
-vim.keymap.set('n', '<leader>F', file_picker('fdfind --type file'))
-vim.keymap.set('n', '<leader>/', rg_picker)
+-- vim.keymap.set('n', '<leader>F', file_picker('fdfind --type file'))
 -- vim.keymap.set('n', '<leader>F', file_picker('fdfind --type file'))

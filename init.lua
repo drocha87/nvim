@@ -32,7 +32,12 @@ vim.o.wildmenu = true
 vim.g.mapleader = ' '
 vim.keymap.set('n', '<esc><esc>', '<cmd>nohlsearch<cr>')
 
-vim.cmd.colorscheme = "slate"
+vim.o.background = "dark"
+vim.pack.add({
+  "https://github.com/ellisonleao/gruvbox.nvim"
+})
+require("gruvbox").setup()
+vim.cmd.colorscheme("gruvbox")
 
 require("pickers")
 require("tsitter")
@@ -67,3 +72,9 @@ vim.keymap.set('c', '<up>', function()
   if vim.fn.pumvisible() == 1 then return '<c-p>' end
   return '<up>'
 end, { expr = true })
+
+vim.pack.add({ { src = "https://github.com/ibhagwan/fzf-lua" } })
+fzf = require("fzf-lua")
+vim.keymap.set('n', '<leader>f', function() fzf.files() end)
+vim.keymap.set('n', '<leader>b', function() fzf.buffers() end)
+vim.keymap.set('n', '<leader>/', function() fzf.grep() end)
